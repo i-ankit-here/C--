@@ -25,4 +25,20 @@ typedef enum{
 
 }token_type;
 
+typedef struct{
+    token_type type;
+    const char* start;
+    int length;
+    int line;
+}Token;
+
+typedef struct{
+    const char* start;
+    const char* current;
+    int line;    
+}Lexer;
+
+void lexel_init(Lexer* lex,const char* source);
+Token* scan_token(Lexer* lex);
+
 #endif
