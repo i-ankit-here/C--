@@ -7,7 +7,7 @@ typedef enum{
     TOKEN_OPEN_BRACE, TOKEN_CLOSE_BRACE,
     TOKEN_PLUS, TOKEN_MINUS,
     TOKEN_STAR, TOKEN_SLASH,
-    TOKEN_SEMICOLON, 
+    TOKEN_SEMICOLON, TOKEN_EOF,
 
     //One or two character tokens
     TOKEN_GREATER, TOKEN_GREATER_EQUAL,
@@ -38,7 +38,7 @@ typedef struct{
     int line;    
 }Lexer;
 
-void lexel_init(Lexer* lex,const char* source);
-Token* scan_token(Lexer* lex);
+void lexer_init(Lexer* lex,const char* source);
+Token scan_token(Lexer* lex);
 
 #endif
