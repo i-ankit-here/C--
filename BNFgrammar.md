@@ -3,9 +3,8 @@
 #### declaration ::= var_declaration | statement
 #### statement ::= expr_statement | if_statement | print_statement | while_statement ;
 
-#### var_declaration ::= int [identifier] ( "=" expression )? ";" ;
+#### var_declaration ::= int IDENTIFIER ( "=" expression )? ";" ;
 
-#### identifier ::= /[ _a-zA-Z ]w*/
 #### expr_statement ::= expression ";" ;
 #### if_statement ::= "if" "(" expression ")" statement ("else" statement)?;
 #### print_statement ::= "print" expression ";";
