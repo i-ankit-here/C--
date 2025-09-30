@@ -21,38 +21,36 @@ static bool is_end(char ch){
     return ch == '\0';   
 }
 
-char advance(Lexer* lex){
+static char advance(Lexer* lex){
     if(is_end(*lex->current))return '\0';
     lex->current++;
     return lex->current[-1];
 }
 
-char peek(Lexer* lex){
+static char peek(Lexer* lex){
     return *lex->current;
 }
 
-char next_peek(Lexer* lex){
+static char next_peek(Lexer* lex){
     if(is_end(*lex->current))return '\0';
     return *(lex->current+1);
 }
 
-void lexer_intit(Lexer* lex,const char* source){
-    lex->start = source;
-    lex->current = source;
-    lex->line = 1;
-}
-
 //Skip the white spaces or new line
 void skip_white_space(Lexer* lex){
-    const char* curr = lex->current;
-    while(!is_end(*curr)){
-        if(*curr == ' ' || *curr == '\t')curr++;
-        else if (*curr == '\n'){
+    while(!is_end(peek(lex))){
+        if(peek(lex) == ' ' || peek(lex) == '\t')advance(lex);
+        else if (peek(lex) == '\n'){
             lex->line++;
-            curr++;
-        }else break;
+            advance(lex);
+        }else if(peek(lex) == '/' && next_peek(lex) == '/'){
+            while(true){
+                char ch = advance(lex);
+                if(ch == '\n' || is_end(ch))break;
+            }
+        }
+        else break;
     }
-    lex->current = curr;
     return;
 }
 
@@ -111,6 +109,14 @@ Token token_identifier_keyword(Lexer* lex){
     return token;
 }
 
+Token error_token(Lexer* lex,const char* str){
+    Token err;
+    err.line = lex->line;
+    err.start = str;
+    err.type = TOKEN_ERROR;
+    err.length = get_size(str);
+}
+
 Token scan_token(Lexer* lex){
     skip_white_space(lex);
     lex->start = lex->current;
@@ -118,7 +124,6 @@ Token scan_token(Lexer* lex){
 
     if(is_digit(ch))return token_number(lex);
     if(is_alphabet(ch))return token_identifier_keyword(lex);
-
     switch (ch){
         //Single character tokens
         case '+': return create_token(lex,TOKEN_PLUS);
@@ -131,7 +136,6 @@ Token scan_token(Lexer* lex){
         case '}': return create_token(lex,TOKEN_CLOSE_BRACE);
         case ';': return create_token(lex,TOKEN_SEMICOLON);
         case '\0': return create_token(lex,TOKEN_EOF);
-
         //One or  two character tokens
         case '!':{
             char chr = peek(lex);
@@ -161,7 +165,6 @@ Token scan_token(Lexer* lex){
                 return create_token(lex,TOKEN_SMALLER_EQUAL);
             }else return create_token(lex,TOKEN_SMALLER);
         }
-
-        default:break;
     }
+    return error_token(lex,"unexpected character");
 }

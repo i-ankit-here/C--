@@ -17,6 +17,7 @@ typedef enum{
     
     //Literals
     TOKEN_IDENTIFIER, TOKEN_INTEGER,
+    TOKEN_ERROR,
 
     //Keywords
     TOKEN_IF, TOKEN_ELSE,
