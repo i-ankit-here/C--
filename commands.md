@@ -1,0 +1,1 @@
+##### gcc main.c ./Lexer/lexer.c ./Parsers/RecursiveDescentParser/RDparser.c -o test
