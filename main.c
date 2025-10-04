@@ -1,18 +1,19 @@
 #include "stdio.h"
 #include "./Lexer/lexer.h"
 #include "./Parsers/RecursiveDescentParser/RDparser.h"
+#include "./Parsers/RecursiveDescentParser/AST.h"
 Lexer lexer;
 Parser parser;
 int main(){
     const char* source =
         "    //hey i am ankit\n"
         "    "
-        "  //  afkasdfkh"
+        "  //  afkasdfkh\n"
         "    int sum = 10 + 25;\n"
         "    if (sum > 30) \n"
         "        print sum;\n"
         "     else \n"
-        "        print1 0; // Print zero\n"
+        "        print 0; // Print zero\n"
         "    \n";
 
     // Lexer lexer;
@@ -35,8 +36,9 @@ int main(){
     //         break;
     //     }
     // }
-    bool flag = parse(source);
-    if(flag)printf("Succesfully parsed");
+    int cnt = 0;
+    Stmt** stmt = parse(source,&cnt);
+    printAst(stmt,cnt);
 
     return 0;
 }
